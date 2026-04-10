@@ -45,7 +45,7 @@ class DonationSeeder extends Seeder
                     'status' => $status,
                     'is_anonymous' => $isAnonymous,
                     'message' => $this->getRandomMessage(),
-                    'order_id' => 'ORD-'.time().'-'.rand(1000, 9999),
+                    'order_id' => 'ORD-'.now()->format('YmdHis').'-'.$campaign->id.'-'.$i.'-'.rand(1000, 9999),
                     'payment_type' => $paymentType,
                     'paid_at' => $status == 1 ? now()->subDays(rand(1, 30)) : null,
                 ]);

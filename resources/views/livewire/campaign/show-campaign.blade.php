@@ -1,12 +1,12 @@
 <!-- Main Content -->
-<div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8 bg-white dark:bg-slate-900 min-h-screen">
+<div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8 bg-white bg-white min-h-screen">
     <div class="grid gap-8 lg:grid-cols-3">
         <!-- Left Column - Campaign Details -->
         <div class="lg:col-span-2 space-y-8">
             <!-- Campaign Header -->
-            <div class="bg-white dark:bg-slate-800 rounded-3xl border border-gray-200 dark:border-slate-600 p-0 shadow-sm overflow-hidden">
+            <div class="bg-white bg-white rounded-3xl border border-gray-200 border-gray-200 p-0 shadow-sm overflow-hidden">
                 <!-- Cover Image -->
-                <div class="w-full h-100 bg-gray-100 dark:bg-slate-700">
+                <div class="w-full h-100 bg-gray-100 bg-gray-100">
                     <img
                         src="{{ \App\Helper\CampaignHelper::getImageUrl($campaign->image) }}"
                         alt="{{ $campaign->title }}"
@@ -18,7 +18,7 @@
                         <div class="flex items-center gap-2">
                             @if($campaign->category)
                                 <span
-                                    class="inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-slate-300 border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700">
+                                    class="inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium text-gray-700 text-gray-600 border-gray-200 border-gray-200 bg-white bg-gray-100">
                                         {{ $campaign->category->name }}
                                     </span>
                             @endif
@@ -40,21 +40,21 @@
                         </div>
                     </div>
 
-                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{{ $campaign->title }}</h1>
-                    <div class="prose prose-slate dark:prose-invert max-w-none text-gray-600 dark:text-slate-300">
+                    <h1 class="text-2xl font-bold text-gray-900 text-gray-900 mb-2">{{ $campaign->title }}</h1>
+                    <div class="prose prose-slate dark:prose-invert max-w-none text-gray-600 text-gray-600">
                         {!! $campaign->description !!}
                     </div>
 
                     <!-- Campaign Creator Info -->
                     @if($campaign->user)
-                        <div class="mt-4 pt-4 border-t border-gray-100 dark:border-slate-600">
+                        <div class="mt-4 pt-4 border-t border-gray-100 border-gray-200">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-gray-200 dark:bg-slate-600 rounded-full flex items-center justify-center">
+                                <div class="w-10 h-10 bg-gray-200 bg-gray-200 rounded-full flex items-center justify-center">
                                     <span
-                                        class="text-gray-600 dark:text-slate-300 font-semibold">{{ strtoupper(mb_substr($campaign->user->name ?? 'Admin', 0, 1)) }}</span>
+                                        class="text-gray-600 text-gray-600 font-semibold">{{ strtoupper(mb_substr($campaign->user->name ?? 'Admin', 0, 1)) }}</span>
                                 </div>
                                 <div>
-                                    <p class="text-sm font-medium text-gray-900 dark:text-white">Dibuat
+                                    <p class="text-sm font-medium text-gray-900 text-gray-900">Dibuat
                                         oleh {{ $campaign->user->name ?? 'Admin' }}</p>
                                     <p class="text-xs text-gray-500 dark:text-slate-400">
                                         Mulai {{ $campaign->start_date ? $campaign->start_date->format('d M Y') : 'Tidak ditentukan' }}</p>
@@ -68,17 +68,17 @@
 
 
             <!-- Update Terbaru -->
-            <div class="bg-white dark:bg-slate-800 rounded-3xl border border-gray-200 dark:border-slate-600 p-6 shadow-sm">
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Update Terbaru</h2>
+            <div class="bg-white bg-white rounded-3xl border border-gray-200 border-gray-200 p-6 shadow-sm">
+                <h2 class="text-lg font-semibold text-gray-900 text-gray-900 mb-4">Update Terbaru</h2>
                 @if(($campaign->articles ?? collect())->isEmpty())
-                    <p class="text-sm text-gray-600 dark:text-slate-300">Belum ada update untuk campaign ini.</p>
+                    <p class="text-sm text-gray-600 text-gray-600">Belum ada update untuk campaign ini.</p>
                 @else
                     <div class="space-y-4">
                         @foreach($campaign->articles as $article)
-                            <div class="p-4 border border-gray-100 dark:border-slate-600 rounded-2xl hover:border-gray-200 dark:hover:border-slate-500 transition bg-white dark:bg-slate-700">
+                            <div class="p-4 border border-gray-100 border-gray-200 rounded-2xl hover:border-gray-200 dark:hover:border-slate-500 transition bg-white bg-gray-100">
                                 <div class="flex items-start justify-between gap-4">
                                     <div>
-                                        <h3 class="font-medium text-gray-900 dark:text-white">{{ $article->title }}</h3>
+                                        <h3 class="font-medium text-gray-900 text-gray-900">{{ $article->title }}</h3>
                                         <p class="text-xs text-gray-500 dark:text-slate-400 mt-1">
                                             {{ $article->created_at?->format('d M Y') }}
                                             @if($article->author)
@@ -87,7 +87,7 @@
                                         </p>
                                     </div>
                                 </div>
-                                <p class="mt-2 text-sm text-gray-600 dark:text-slate-300">{{ \Illuminate\Support\Str::limit(strip_tags($article->content), 180) }}</p>
+                                <p class="mt-2 text-sm text-gray-600 text-gray-600">{{ \Illuminate\Support\Str::limit(strip_tags($article->content), 180) }}</p>
                                 <button
                                     type="button"
                                     wire:click="showArticle({{ $article->id }})"
@@ -103,17 +103,17 @@
 
             <!-- Attachments -->
             @if($campaign->attachments && $campaign->attachments->count() > 0)
-                <div class="bg-white dark:bg-slate-800 rounded-3xl border border-gray-200 dark:border-slate-600 p-6 shadow-sm">
-                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Dokumen & Lampiran</h2>
+                <div class="bg-white bg-white rounded-3xl border border-gray-200 border-gray-200 p-6 shadow-sm">
+                    <h2 class="text-lg font-semibold text-gray-900 text-gray-900 mb-4">Dokumen & Lampiran</h2>
                     <div class="space-y-3">
                         @foreach($campaign->attachments as $attachment)
-                            <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-slate-700 rounded-2xl">
-                                <div class="w-10 h-10 bg-gray-200 dark:bg-slate-600 rounded-full flex items-center justify-center">
-                                    <span class="text-gray-600 dark:text-slate-300 text-sm">📎</span>
+                            <div class="flex items-center gap-3 p-3 bg-gray-50 bg-gray-100 rounded-2xl">
+                                <div class="w-10 h-10 bg-gray-200 bg-gray-200 rounded-full flex items-center justify-center">
+                                    <span class="text-gray-600 text-gray-600 text-sm">📎</span>
                                 </div>
                                 <div class="flex-1">
-                                    <p class="font-medium text-gray-900 dark:text-white">{{ $attachment->original_name ?? 'File' }}</p>
-                                    <p class="text-sm text-gray-600 dark:text-slate-300">{{ $attachment->file_size ?? 'Unknown size' }}</p>
+                                    <p class="font-medium text-gray-900 text-gray-900">{{ $attachment->original_name ?? 'File' }}</p>
+                                    <p class="text-sm text-gray-600 text-gray-600">{{ $attachment->file_size ?? 'Unknown size' }}</p>
                                 </div>
                                 <a href="{{ asset('storage/' . $attachment->file_path) }}"
                                    target="_blank"
@@ -132,8 +132,8 @@
         <div class="lg:col-span-1">
             <div class="sticky-sidebar space-y-6">
                 <!-- Donation Card -->
-                <div class="bg-white dark:bg-slate-800 rounded-3xl border border-gray-200 dark:border-slate-600 p-6 shadow-sm">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Lakukan Donasi</h3>
+                <div class="bg-white bg-white rounded-3xl border border-gray-200 border-gray-200 p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-gray-900 text-gray-900 mb-4">Lakukan Donasi</h3>
 
                     <!-- Progress Bar -->
                     <div class="mb-6">
@@ -141,20 +141,20 @@
                             $progressData = \App\Helper\CampaignHelper::getProgressData($campaign);
                         @endphp
                         <div class="flex items-center justify-between text-sm mb-2">
-                            <span class="text-gray-600 dark:text-slate-300">Progress</span>
-                            <span class="font-semibold text-gray-900 dark:text-white">{{ $progressData['formatted_percent'] }}%</span>
+                            <span class="text-gray-600 text-gray-600">Progress</span>
+                            <span class="font-semibold text-gray-900 text-gray-900">{{ $progressData['formatted_percent'] }}%</span>
                         </div>
-                        <div class="relative h-3 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-slate-700">
+                        <div class="relative h-3 w-full overflow-hidden rounded-full bg-gray-100 bg-gray-100">
                             <div
                                 class="absolute left-0 top-0 h-full rounded-full {{ $progressData['progress_class'] }} transition-all"
                                 style="width: {{ $progressData['percent'] }}%"
                             ></div>
                         </div>
-                        <div class="flex items-center justify-between text-xs text-gray-600 dark:text-slate-300 mt-2">
+                        <div class="flex items-center justify-between text-xs text-gray-600 text-gray-600 mt-2">
                             <span>Terkumpul <span
-                                    class="font-semibold text-gray-900 dark:text-white">{{ \App\Helper\NumberHelper::formatIDR($campaign->total_donations) }}</span></span>
+                                    class="font-semibold text-gray-900 text-gray-900">{{ \App\Helper\NumberHelper::formatIDR($campaign->total_donations) }}</span></span>
                             <span>Target <span
-                                    class="font-semibold text-gray-900 dark:text-white">
+                                    class="font-semibold text-gray-900 text-gray-900">
                                     {{ \App\Helper\NumberHelper::formatIDR($campaign->target_amount) }}
                                 </span></span>
                         </div>
@@ -169,9 +169,9 @@
                     </a>
 
                     <!-- Campaign Info -->
-                    <div class="mt-6 pt-6 border-t border-gray-100 dark:border-slate-600 space-y-3">
+                    <div class="mt-6 pt-6 border-t border-gray-100 border-gray-200 space-y-3">
                         <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-600 dark:text-slate-300">Status</span>
+                            <span class="text-gray-600 text-gray-600">Status</span>
                             @php
                                 $statusBadge = \App\Helper\CampaignHelper::getStatusBadge($campaign->status);
                             @endphp
@@ -182,23 +182,23 @@
                         </div>
                         @if($campaign->end_date)
                             <div class="flex items-center justify-between text-sm">
-                                <span class="text-gray-600 dark:text-slate-300">Sisa Waktu</span>
-                                <span class="font-semibold text-gray-900 dark:text-white">{{ $progressData['days_left'] }} hari</span>
+                                <span class="text-gray-600 text-gray-600">Sisa Waktu</span>
+                                <span class="font-semibold text-gray-900 text-gray-900">{{ $progressData['days_left'] }} hari</span>
                             </div>
                         @endif
                         <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-600 dark:text-slate-300">Total Donatur</span>
+                            <span class="text-gray-600 text-gray-600">Total Donatur</span>
                             <span
-                                class="font-semibold text-gray-900 dark:text-white">{{ number_format($campaign->donations_count, 0, ',', '.') }}</span>
+                                class="font-semibold text-gray-900 text-gray-900">{{ number_format($campaign->donations_count, 0, ',', '.') }}</span>
                         </div>
                         <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-600 dark:text-slate-300">Kategori</span>
+                            <span class="text-gray-600 text-gray-600">Kategori</span>
                             <span
-                                class="font-semibold text-gray-900 dark:text-white capitalize">{{ $campaign->category->name ?? 'N/A' }}</span>
+                                class="font-semibold text-gray-900 text-gray-900 capitalize">{{ $campaign->category->name ?? 'N/A' }}</span>
                         </div>
                         @if($campaign->is_featured)
                             <div class="flex items-center justify-between text-sm">
-                                <span class="text-gray-600 dark:text-slate-300">Featured</span>
+                                <span class="text-gray-600 text-gray-600">Featured</span>
                                 <span class="inline-flex items-center text-amber-600 dark:text-amber-400">
                                         ⭐
                                     </span>
@@ -206,32 +206,32 @@
                         @endif
                         @if($campaign->start_date)
                             <div class="flex items-center justify-between text-sm">
-                                <span class="text-gray-600 dark:text-slate-300">Mulai</span>
+                                <span class="text-gray-600 text-gray-600">Mulai</span>
                                 <span
-                                    class="font-semibold text-gray-900 dark:text-white">{{ $campaign->start_date->format('d M Y') }}</span>
+                                    class="font-semibold text-gray-900 text-gray-900">{{ $campaign->start_date->format('d M Y') }}</span>
                             </div>
                         @endif
                         @if($campaign->end_date)
                             <div class="flex items-center justify-between text-sm">
-                                <span class="text-gray-600 dark:text-slate-300">Berakhir</span>
+                                <span class="text-gray-600 text-gray-600">Berakhir</span>
                                 <span
-                                    class="font-semibold text-gray-900 dark:text-white">{{ $campaign->end_date->format('d M Y') }}</span>
+                                    class="font-semibold text-gray-900 text-gray-900">{{ $campaign->end_date->format('d M Y') }}</span>
                             </div>
                         @endif
                     </div>
                 </div>
 
                 <!-- Recent Donors -->
-                <div class="bg-white dark:bg-slate-800 rounded-3xl border border-gray-200 dark:border-slate-600 p-6 shadow-sm">
+                <div class="bg-white bg-white rounded-3xl border border-gray-200 border-gray-200 p-6 shadow-sm">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Donatur Terbaru</h3>
+                        <h3 class="text-lg font-semibold text-gray-900 text-gray-900">Donatur Terbaru</h3>
                         <span class="text-sm text-gray-500 dark:text-slate-400">{{ $campaign->donations_count }} donatur</span>
                     </div>
 
                     <div class="space-y-3">
                         @forelse($campaign->donations->take(5) as $donation)
                             <div
-                                class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-slate-700 rounded-2xl hover:bg-gray-100 dark:hover:bg-slate-600 transition-colors">
+                                class="flex items-center gap-3 p-3 bg-gray-50 bg-gray-100 rounded-2xl hover:bg-gray-100 dark:hover:bg-slate-600 transition-colors">
                                 <div
                                     class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center flex-shrink-0">
                                     <span
@@ -239,7 +239,7 @@
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <div class="flex items-center gap-2 mb-1">
-                                        <p class="font-semibold text-gray-900 dark:text-white truncate">{{ $donation->donor_name ?? 'Anonymous' }}</p>
+                                        <p class="font-semibold text-gray-900 text-gray-900 truncate">{{ $donation->donor_name ?? 'Anonymous' }}</p>
                                         @if($donation->is_anonymous)
                                             <span class="text-xs text-gray-500 dark:text-slate-400">(Anonim)</span>
                                         @endif
@@ -257,7 +257,7 @@
                                         </div>
                                     </div>
                                     @if($donation->message)
-                                        <p class="text-xs text-gray-600 dark:text-slate-300 mt-1 line-clamp-2 italic">
+                                        <p class="text-xs text-gray-600 text-gray-600 mt-1 line-clamp-2 italic">
                                             "{{ $donation->message }}"</p>
                                     @endif
                                 </div>
@@ -265,7 +265,7 @@
                         @empty
                             <div class="text-center py-8">
                                 <div
-                                    class="w-16 h-16 bg-gray-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-3">
+                                    class="w-16 h-16 bg-gray-100 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
                                     <svg class="w-8 h-8 text-gray-400 dark:text-slate-500" fill="none" stroke="currentColor"
                                          viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -279,7 +279,7 @@
                     </div>
 
                     @if($campaign->donations_count > 5)
-                        <div class="mt-4 pt-4 border-t border-gray-100 dark:border-slate-600">
+                        <div class="mt-4 pt-4 border-t border-gray-100 border-gray-200">
                             <button
                                 class="w-full text-center text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium">
                                 Lihat Semua Donatur ({{ $campaign->donations_count }})

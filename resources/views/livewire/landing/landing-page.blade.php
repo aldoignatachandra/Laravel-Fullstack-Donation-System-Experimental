@@ -1,8 +1,8 @@
-<div class="bg-slate-50 dark:bg-slate-900">
+<div class="bg-slate-50">
 
     @include('livewire.landing._hero')
 
-    <section class="border-t border-emerald-100 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-900/20">
+    <section class="border-t border-emerald-100 bg-emerald-50">
         <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
             @include('livewire.landing._category-filter', ['categories' => $categories])
         </div>

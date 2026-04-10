@@ -15,10 +15,12 @@ return new class extends Migration
         Schema::create('campaign_articles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('campaign_id')
+                ->nullable()
                 ->constrained('campaigns')
                 ->nullOnDelete();
 
             $table->foreignId('author_id')
+                ->nullable()
                 ->constrained('users')
                 ->nullOnDelete();
 
