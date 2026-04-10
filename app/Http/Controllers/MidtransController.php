@@ -19,24 +19,25 @@ class MidtransController extends Controller
             if ($donation) {
                 return response()->json([
                     'status' => 'success',
-                    'message' => 'Callback processed successfully'
+                    'message' => 'Callback processed successfully',
                 ]);
             }
+
             return response()->json([
                 'status' => 'error',
-                'message' => 'Donation not found'
+                'message' => 'Donation not found',
             ], 404);
 
         } catch (\Exception $e) {
             Log::error('Midtrans Callback error:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
-                'payload' => $request->all()
+                'payload' => $request->all(),
             ]);
 
             return response()->json([
                 'status' => 'error',
-                'message' => 'Callback processing failed'
+                'message' => 'Callback processing failed',
             ], 500);
         }
     }

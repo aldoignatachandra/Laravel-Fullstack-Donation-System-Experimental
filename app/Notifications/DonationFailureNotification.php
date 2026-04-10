@@ -40,9 +40,9 @@ class DonationFailureNotification extends Notification implements ShouldQueue
         $campaign = $this->donation->campaign;
         $donor = $this->donation->user;
         $statusText = $this->getStatusText();
-        
+
         return (new MailMessage)
-            ->subject('Donasi Gagal Diproses - ' . $campaign->title)
+            ->subject('Donasi Gagal Diproses - '.$campaign->title)
             ->view('emails.notifications.donation-failure', [
                 'donation' => $this->donation,
                 'donor' => $donor,
@@ -73,7 +73,7 @@ class DonationFailureNotification extends Notification implements ShouldQueue
      */
     private function getStatusText(): string
     {
-        return match($this->donation->status) {
+        return match ($this->donation->status) {
             Donation::STATUS_CANCELLED => 'Dibatalkan',
             Donation::STATUS_FAILED => 'Gagal',
             Donation::STATUS_PENDING => 'Menunggu Pembayaran',

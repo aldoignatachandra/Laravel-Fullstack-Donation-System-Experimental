@@ -15,7 +15,7 @@ class ListDonations extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-//            CreateAction::make(),
+            //            CreateAction::make(),
         ];
     }
 
@@ -40,5 +40,4 @@ class ListDonations extends ListRecords
                 ->badge($model::query()->where('status', $model::STATUS_CANCELLED)->count()),
         ];
     }
-
 }

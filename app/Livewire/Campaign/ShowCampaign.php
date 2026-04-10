@@ -3,7 +3,6 @@
 namespace App\Livewire\Campaign;
 
 use App\Models\Campaign;
-use App\Models\CampaignArticle;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -15,6 +14,7 @@ class ShowCampaign extends Component
     public string $slug;
 
     public bool $isArticleModalOpen = false;
+
     public ?array $articleModal = null;
 
     public function mount(string $slug): void

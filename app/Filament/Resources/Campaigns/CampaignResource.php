@@ -13,11 +13,11 @@ use App\Filament\Resources\Campaigns\Tables\CampaignsTable;
 use App\Filament\Resources\Campaigns\Widgets\CampaignsByStatusWidget;
 use App\Models\Campaign;
 use BackedEnum;
-use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class CampaignResource extends Resource
 {

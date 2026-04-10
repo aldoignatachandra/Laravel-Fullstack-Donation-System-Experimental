@@ -28,12 +28,12 @@ class CampaignFactory extends Factory
             'Air Bersih untuk Desa',
             'Bantuan Anak Yatim Piatu',
             'Pemulihan Pasca Gempa',
-            'Penghijauan dan Reboisasi'
+            'Penghijauan dan Reboisasi',
         ];
 
         $city = fake()->city();
         $topic = fake()->randomElement($topics);
-        $title = $topic . ' di ' . $city;
+        $title = $topic.' di '.$city;
 
         // Longer, multi-paragraph description that better represents real campaigns
         $paragraphs = array_merge(
@@ -51,7 +51,7 @@ class CampaignFactory extends Factory
             'image' => null,
             'title' => $title,
             'description' => $description,
-            'slug' => Str::slug($title) . '-' . fake()->unique()->numberBetween(1000, 9999),
+            'slug' => Str::slug($title).'-'.fake()->unique()->numberBetween(1000, 9999),
             'target_amount' => fake()->numberBetween(10000000, 500000000), // Rp 10jt - 500jt
             'start_date' => fake()->dateTimeBetween('-2 months', 'now'),
             'end_date' => fake()->dateTimeBetween('+1 month', '+8 months'),

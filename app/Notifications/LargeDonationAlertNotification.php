@@ -39,9 +39,9 @@ class LargeDonationAlertNotification extends Notification implements ShouldQueue
     {
         $campaign = $this->donation->campaign;
         $donor = $this->donation->user;
-        
+
         return (new MailMessage)
-            ->subject('🚨 ALERT: Donasi Besar Diterima - Rp ' . number_format($this->donation->amount, 0, ',', '.'))
+            ->subject('🚨 ALERT: Donasi Besar Diterima - Rp '.number_format($this->donation->amount, 0, ',', '.'))
             ->view('emails.notifications.large-donation-alert', [
                 'donation' => $this->donation,
                 'donor' => $donor,

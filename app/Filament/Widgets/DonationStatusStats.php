@@ -28,31 +28,31 @@ class DonationStatusStats extends StatsOverviewWidget
         $cancelled = Donation::query()->where('status', Donation::STATUS_CANCELLED)->sum('amount');
 
         return [
-            Stat::make('Total Donasi',  NumberHelper::formatIDR($total))
+            Stat::make('Total Donasi', NumberHelper::formatIDR($total))
                 ->description('Total nilai donasi')
                 ->descriptionIcon('heroicon-m-rectangle-stack')
                 ->color('gray')
                 ->extraAttributes(['class' => 'text-xs py-2 px-2']),
 
-            Stat::make('Pending',  NumberHelper::formatIDR($pending))
+            Stat::make('Pending', NumberHelper::formatIDR($pending))
                 ->description('Menunggu pembayaran')
                 ->descriptionIcon('heroicon-m-clock')
                 ->color('gray')
                 ->extraAttributes(['class' => 'text-xs py-2 px-2']),
 
-            Stat::make('Paid',  NumberHelper::formatIDR($paid))
+            Stat::make('Paid', NumberHelper::formatIDR($paid))
                 ->description('Pembayaran berhasil')
                 ->descriptionIcon('heroicon-m-check-circle')
                 ->color('success')
                 ->extraAttributes(['class' => 'text-xs py-2 px-2']),
 
-            Stat::make('Failed',  NumberHelper::formatIDR($failed))
+            Stat::make('Failed', NumberHelper::formatIDR($failed))
                 ->description('Pembayaran gagal')
                 ->descriptionIcon('heroicon-m-x-circle')
                 ->color('danger')
                 ->extraAttributes(['class' => 'text-xs py-2 px-2']),
 
-            Stat::make('Cancelled',  NumberHelper::formatIDR($cancelled))
+            Stat::make('Cancelled', NumberHelper::formatIDR($cancelled))
                 ->description('Dibatalkan')
                 ->descriptionIcon('heroicon-m-stop-circle')
                 ->color('warning')
@@ -60,5 +60,3 @@ class DonationStatusStats extends StatsOverviewWidget
         ];
     }
 }
-
-

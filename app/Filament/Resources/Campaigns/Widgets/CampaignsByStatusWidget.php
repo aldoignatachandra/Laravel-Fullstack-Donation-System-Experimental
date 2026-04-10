@@ -8,7 +8,6 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class CampaignsByStatusWidget extends StatsOverviewWidget
 {
-
     protected static ?string $maxHeight = 'auto';
 
     protected function getColumns(): int

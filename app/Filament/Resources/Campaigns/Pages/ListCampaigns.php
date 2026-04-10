@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Campaigns\Pages;
 
 use App\Filament\Resources\Campaigns\CampaignResource;
-use App\Filament\Resources\Campaigns\Widgets\CampaignsByStatusWidget;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
@@ -44,5 +43,4 @@ class ListCampaigns extends ListRecords
                 ->badge($model::query()->where('status', 4)->count()),
         ];
     }
-    
 }

@@ -15,6 +15,7 @@ use Livewire\Component;
 class DonationForm extends Component
 {
     public Campaign $campaign;
+
     #[Validate('required|numeric|min:10000')]
     public $selectedAmount = 0;
 
@@ -26,7 +27,6 @@ class DonationForm extends Component
 
     #[Validate('boolean')]
     public $isAnonymous = false;
-
 
     public function mount($slug)
     {
@@ -46,7 +46,7 @@ class DonationForm extends Component
     {
         if ($this->customAmount) {
             // Remove formatting and convert to integer
-            $cleanAmount = (int)str_replace(['.', ','], '', $this->customAmount);
+            $cleanAmount = (int) str_replace(['.', ','], '', $this->customAmount);
             $this->selectedAmount = $cleanAmount;
             // Update customAmount with formatted value
             $this->customAmount = number_format($cleanAmount, 0, ',', '.');
@@ -62,8 +62,7 @@ class DonationForm extends Component
     {
         $this->validate();
 
-
-         // Process the donation
+        // Process the donation
         try {
             $service = app(DonationService::class);
             $result = $service->recordDonation($this->campaign, [
@@ -77,6 +76,7 @@ class DonationForm extends Component
                 return redirect()->away($result['snap_url']);
             } else {
                 $this->addError('donation', 'Failed to process donation. Please try again.');
+
                 return;
             }
 
@@ -94,7 +94,7 @@ class DonationForm extends Component
                 'campaign_id' => $this->campaign->id,
                 'user_id' => Auth::id(),
                 'amount' => $this->selectedAmount,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
         }
     }
@@ -106,7 +106,7 @@ class DonationForm extends Component
         $predefinedAmounts = [100000, 200000, 300000, 400000, 500000, 1000000];
 
         return view('livewire.campaign.donation-form', [
-            'predefinedAmounts' => $predefinedAmounts
+            'predefinedAmounts' => $predefinedAmounts,
         ]);
     }
 }

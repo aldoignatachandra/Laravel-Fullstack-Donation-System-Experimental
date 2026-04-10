@@ -26,13 +26,17 @@ class Donation extends Model
     protected $casts = [
         'amount' => 'decimal:2',
         'is_anonymous' => 'boolean',
-        'paid_at' => 'datetime'
+        'paid_at' => 'datetime',
     ];
 
     const STATUS_PENDING = 0;
+
     const STATUS_PAID = 1;
+
     const STATUS_FAILED = 2;
+
     const STATUS_CANCELLED = 3;
+
     const PAYMENT_METHOD = 'midtrans';
 
     /**

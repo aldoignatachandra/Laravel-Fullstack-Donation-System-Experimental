@@ -24,6 +24,7 @@ class DonationResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::CurrencyDollar;
 
     protected static string|UnitEnum|null $navigationGroup = 'Campaign Management';
+
     protected static ?string $navigationLabel = 'Donations';
 
     protected static ?string $recordTitleAttribute = 'id';

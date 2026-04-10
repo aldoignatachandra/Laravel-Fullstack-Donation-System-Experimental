@@ -3,10 +3,10 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Donation;
-use Filament\Widgets\ChartWidget;
-use Filament\Widgets\ChartWidget\Concerns\HasFiltersSchema;
 use Filament\Forms\Components\DatePicker;
 use Filament\Schemas\Schema;
+use Filament\Widgets\ChartWidget;
+use Filament\Widgets\ChartWidget\Concerns\HasFiltersSchema;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -14,7 +14,8 @@ class DonationsCollectedBarChart extends ChartWidget
 {
     use HasFiltersSchema;
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
+
     protected function getType(): string
     {
         return 'bar';
@@ -42,7 +43,7 @@ class DonationsCollectedBarChart extends ChartWidget
         }
 
         /** @var Collection<int, array{label:string,total:float}> $data */
-        $data = $months->map(function (Carbon $month) use ($start, $end) {
+        $data = $months->map(function (Carbon $month) {
             $label = $month->isoFormat('MMM YYYY');
 
             $total = Donation::query()
@@ -82,5 +83,3 @@ class DonationsCollectedBarChart extends ChartWidget
         ]);
     }
 }
-
-

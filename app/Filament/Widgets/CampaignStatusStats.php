@@ -66,5 +66,3 @@ class CampaignStatusStats extends StatsOverviewWidget
         ];
     }
 }
-
-

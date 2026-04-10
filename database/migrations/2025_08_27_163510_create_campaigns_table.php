@@ -19,14 +19,13 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->string('title');
             $table->text('description');
-            $table->string('slug');     
+            $table->string('slug');
             $table->decimal('target_amount', 20, 2);
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->integer('status')->default(0);
             $table->boolean('is_featured')->default(false);
 
-            
             $table->timestamps();
         });
     }

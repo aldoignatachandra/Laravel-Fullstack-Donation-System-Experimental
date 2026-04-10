@@ -39,9 +39,9 @@ class NewDonationReceivedNotification extends Notification implements ShouldQueu
     {
         $campaign = $this->donation->campaign;
         $donor = $this->donation->user;
-        
+
         return (new MailMessage)
-            ->subject('Donasi Baru Diterima untuk Campaign: ' . $campaign->title)
+            ->subject('Donasi Baru Diterima untuk Campaign: '.$campaign->title)
             ->view('emails.notifications.new-donation-received', [
                 'donation' => $this->donation,
                 'donor' => $donor,

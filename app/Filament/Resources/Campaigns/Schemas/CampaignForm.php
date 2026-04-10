@@ -44,13 +44,13 @@ class CampaignForm
                                     ->label('Slug URL')
                                     ->required()
                                     ->maxLength(255)
-                                    ->unique(ignoreRecord: true)
+                                    ->unique(ignoreRecord: true),
                             ]),
 
                         RichEditor::make('description')
                             ->label('Deskripsi Kampanye')
                             ->required()
-                            ->columnSpanFull()
+                            ->columnSpanFull(),
                     ])
                     ->columnSpanFull(),
 
@@ -106,8 +106,6 @@ class CampaignForm
                             ->columnSpanFull(),
                     ])
                     ->columnSpanFull(),
-
-
 
                 // Campaign Status Section
                 Section::make('Status Kampanye')

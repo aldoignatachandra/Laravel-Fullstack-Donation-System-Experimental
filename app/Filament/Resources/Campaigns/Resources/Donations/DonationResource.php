@@ -31,10 +31,10 @@ class DonationResource extends Resource
         return DonationForm::configure($schema);
     }
 
-//    public static function infolist(Schema $schema): Schema
-//    {
-//        return DonationInfolist::configure($schema);
-//    }
+    //    public static function infolist(Schema $schema): Schema
+    //    {
+    //        return DonationInfolist::configure($schema);
+    //    }
 
     public static function table(Table $table): Table
     {

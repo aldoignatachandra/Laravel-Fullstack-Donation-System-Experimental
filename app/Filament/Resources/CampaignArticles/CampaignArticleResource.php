@@ -24,8 +24,8 @@ class CampaignArticleResource extends Resource
     protected static ?string $recordTitleAttribute = 'title';
 
     protected static ?string $navigationLabel = 'Campaign Articles';
-    protected static string|UnitEnum|null $navigationGroup = 'Campaign Management';
 
+    protected static string|UnitEnum|null $navigationGroup = 'Campaign Management';
 
     public static function form(Schema $schema): Schema
     {

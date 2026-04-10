@@ -15,24 +15,24 @@ class CampaignCategorySeeder extends Seeder
         $categories = [
             [
                 'name' => 'Pendidikan',
-                'description' => 'Kampanye untuk membantu pendidikan anak-anak yang membutuhkan'
+                'description' => 'Kampanye untuk membantu pendidikan anak-anak yang membutuhkan',
             ],
             [
                 'name' => 'Kesehatan',
-                'description' => 'Kampanye untuk membantu biaya pengobatan dan kesehatan'
+                'description' => 'Kampanye untuk membantu biaya pengobatan dan kesehatan',
             ],
             [
                 'name' => 'Bencana Alam',
-                'description' => 'Kampanye untuk membantu korban bencana alam'
+                'description' => 'Kampanye untuk membantu korban bencana alam',
             ],
             [
                 'name' => 'Sosial',
-                'description' => 'Kampanye untuk membantu masalah sosial masyarakat'
+                'description' => 'Kampanye untuk membantu masalah sosial masyarakat',
             ],
             [
                 'name' => 'Infrastruktur',
-                'description' => 'Kampanye untuk pembangunan infrastruktur yang dibutuhkan'
-            ]
+                'description' => 'Kampanye untuk pembangunan infrastruktur yang dibutuhkan',
+            ],
         ];
 
         foreach ($categories as $category) {

@@ -26,7 +26,7 @@ class CampaignCategoriesTable
                     ->searchable(),
                 TextColumn::make('updated_at')
                     ->dateTime()
-                    ->sortable()
+                    ->sortable(),
             ])
             ->filters([
                 //

@@ -10,7 +10,6 @@ class CampaignArticle extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
         'campaign_id',
         'author_id',
@@ -21,7 +20,9 @@ class CampaignArticle extends Model
     ];
 
     const STATUS_DRAFT = 'draft';
+
     const STATUS_PUBLISHED = 'published';
+
     const STATUS_ARCHIVED = 'archived';
 
     public function campaign(): BelongsTo
@@ -34,4 +35,3 @@ class CampaignArticle extends Model
         return $this->belongsTo(User::class, 'author_id');
     }
 }
-

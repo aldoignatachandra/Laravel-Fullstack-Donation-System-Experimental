@@ -14,13 +14,15 @@ class LandingPage extends Component
     use WithPagination;
 
     public $search = '';
+
     public $selectedCategory = null;
+
     public $categories = [];
 
     public function mount(): void
     {
         $this->categories = CampaignCategory::query()
-            ->select('id','name')->get();
+            ->select('id', 'name')->get();
     }
 
     public function updatedSearch(): void
@@ -40,7 +42,6 @@ class LandingPage extends Component
         $this->resetPage();
     }
 
-
     #[Layout('components.layouts.beramal')]
     #[Title('Beramal')]
     public function render()
@@ -50,8 +51,8 @@ class LandingPage extends Component
             ->where('status', Campaign::STATUS_ACTIVE)
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('title', 'like', '%' . $this->search . '%')
-                        ->orWhere('description', 'like', '%' . $this->search . '%');
+                    $q->where('title', 'like', '%'.$this->search.'%')
+                        ->orWhere('description', 'like', '%'.$this->search.'%');
                 });
             })
             ->when($this->selectedCategory, function ($query) {

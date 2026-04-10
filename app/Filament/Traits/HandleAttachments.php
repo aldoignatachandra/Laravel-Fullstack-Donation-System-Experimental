@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Filament\Traits;
+
 use Illuminate\Database\Eloquent\Model;
 
 trait HandleAttachments
 {
-
     protected function afterCreate(): void
     {
         $data = $this->form->getRawState();
@@ -13,7 +13,6 @@ trait HandleAttachments
         $attachments = $data['attachments'];
         $this->handleAttachments($record, $attachments);
     }
-
 
     protected function afterSave(): void
     {
@@ -34,7 +33,7 @@ trait HandleAttachments
             // Check if the attachment is already associated
             $existingAttachment = $existingAttachments->where('filename', $path)->first();
 
-            if (!$existingAttachment) {
+            if (! $existingAttachment) {
                 // If not, associate the new attachment
                 $record->attachments()->create(['filename' => $path]);
             }

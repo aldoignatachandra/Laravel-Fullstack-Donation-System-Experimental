@@ -42,7 +42,8 @@ class CampaignsTable
                     ->money('IDR')
                     ->description(function (Campaign $record): string {
                         $percentage = $record->target_amount > 0 ? ($record->total_donations / $record->target_amount) * 100 : 0;
-                        return NumberHelper::formatIDR($record->total_donations) . ' - ' . number_format($percentage, 2) . '%';
+
+                        return NumberHelper::formatIDR($record->total_donations).' - '.number_format($percentage, 2).'%';
                     })
                     ->sortable(),
                 TextColumn::make('start_date')

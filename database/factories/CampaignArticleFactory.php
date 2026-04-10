@@ -26,7 +26,7 @@ class CampaignArticleFactory extends Factory
             'Dokumentasi Progres Pekerjaan',
             'Rencana Kegiatan Minggu Ini',
             'Ringkasan Penggunaan Dana',
-        ]) . ' ' . fake()->date('F Y');
+        ]).' '.fake()->date('F Y');
 
         $paragraphs = array_merge(
             [
@@ -39,9 +39,8 @@ class CampaignArticleFactory extends Factory
             'campaign_id' => Campaign::factory(),
             'author_id' => User::factory(),
             'title' => $title,
-            'slug' => Str::slug($title) . '-' . fake()->unique()->numberBetween(1000, 999999),
+            'slug' => Str::slug($title).'-'.fake()->unique()->numberBetween(1000, 999999),
             'content' => implode("\n\n", $paragraphs),
         ];
     }
 }
-

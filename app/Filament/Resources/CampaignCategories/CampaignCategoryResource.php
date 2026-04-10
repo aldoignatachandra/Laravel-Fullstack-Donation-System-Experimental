@@ -11,11 +11,11 @@ use App\Filament\Resources\CampaignCategories\Schemas\CampaignCategoryInfolist;
 use App\Filament\Resources\CampaignCategories\Tables\CampaignCategoriesTable;
 use App\Models\CampaignCategory;
 use BackedEnum;
-use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class CampaignCategoryResource extends Resource
 {
@@ -26,6 +26,7 @@ class CampaignCategoryResource extends Resource
     protected static ?string $recordTitleAttribute = 'name';
 
     protected static string|UnitEnum|null $navigationGroup = 'Campaign Management';
+
     protected static ?string $navigationLabel = 'Campaign Categories';
 
     public static function form(Schema $schema): Schema

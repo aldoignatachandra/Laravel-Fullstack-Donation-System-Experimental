@@ -6,7 +6,6 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
 
@@ -17,7 +16,7 @@ class CampaignArticleForm
         return $schema
             ->components([
                 Section::make('Basic Information')
-                ->columnSpanFull()
+                    ->columnSpanFull()
                     ->description('Complete the main details of the campaign article below.')
                     ->icon('heroicon-o-information-circle')
                     ->columns(2)
@@ -58,13 +57,13 @@ class CampaignArticleForm
                         RichEditor::make('content')
                             ->label('Content')
                             ->toolbarButtons([
-                                'bold', 'italic', 'underline', 'strike', 'link', 'orderedList', 'bulletList', 'blockquote', 'codeBlock', 'undo', 'redo'
+                                'bold', 'italic', 'underline', 'strike', 'link', 'orderedList', 'bulletList', 'blockquote', 'codeBlock', 'undo', 'redo',
                             ])
                             ->placeholder('Write article content here...')
                             ->required()
                             ->columnSpan(2)
                             ->extraAttributes(['style' => 'min-height: 300px;']),
-                    ])
+                    ]),
             ]);
     }
 }

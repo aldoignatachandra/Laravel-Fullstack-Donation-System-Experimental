@@ -9,9 +9,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class CampaignCategory extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name',
-        'description'
+        'description',
     ];
 
     /**

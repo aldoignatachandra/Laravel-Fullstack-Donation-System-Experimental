@@ -11,6 +11,7 @@ use Livewire\Component;
 class Profile extends Component
 {
     public string $name = '';
+
     public string $email = '';
 
     /**
@@ -38,7 +39,7 @@ class Profile extends Component
                 'lowercase',
                 'email',
                 'max:255',
-                Rule::unique(User::class)->ignore($user->id)
+                Rule::unique(User::class)->ignore($user->id),
             ],
         ]);
 

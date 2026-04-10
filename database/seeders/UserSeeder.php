@@ -88,7 +88,7 @@ class UserSeeder extends Seeder
             'name' => 'Admin User',
             'email' => 'superadmin@example.com',
             'password' => bcrypt('example'),
-            'email_verified_at' => now()
+            'email_verified_at' => now(),
         ]);
 
         $user->assignRole(User::ROLE_SUPER_ADMIN);

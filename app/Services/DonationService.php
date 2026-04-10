@@ -20,8 +20,11 @@ class DonationService
 {
     // Business validation constants
     const MIN_DONATION_AMOUNT = 10000; // Rp 10,000
+
     const MAX_DONATION_AMOUNT = 100000000; // Rp 100,000,000
+
     const MAX_DAILY_DONATIONS_PER_USER = 100; // 100 donations
+
     const MAX_DAILY_AMOUNT_PER_USER = 5000000; // Rp 5,000,000
 
     public function __construct()
@@ -35,9 +38,8 @@ class DonationService
     /**
      * Record a new donation with comprehensive business validation
      *
-     * @param Campaign $campaign
-     * @param array $data
      * @return array
+     *
      * @throws ValidationException
      * @throws \RuntimeException
      */
@@ -54,7 +56,7 @@ class DonationService
                 ->where('id', '=', $campaign->id)
                 ->lockForUpdate()->first();
 
-            if (!$campaign) {
+            if (! $campaign) {
                 throw new \RuntimeException('Campaign not found');
             }
 
@@ -68,7 +70,7 @@ class DonationService
                 'amount' => $data['amount'],
                 'payment_method' => Donation::PAYMENT_METHOD,
                 'status' => Donation::STATUS_PENDING,
-                'is_anonymous' => (bool)($data['is_anonymous'] ?? false),
+                'is_anonymous' => (bool) ($data['is_anonymous'] ?? false),
                 'message' => $data['message'] ?? null,
                 'order_id' => $orderId,
                 'payment_type' => 'automatic',
@@ -84,7 +86,7 @@ class DonationService
                 'campaign_id' => $campaign->id,
                 'user_id' => Auth::id(),
                 'amount' => $data['amount'],
-                'order_id' => $orderId
+                'order_id' => $orderId,
             ]);
 
             DB::commit();
@@ -93,7 +95,7 @@ class DonationService
                 'success' => true,
                 'snap_url' => $snapLink,
                 'donation_id' => $donation->id,
-                'order_id' => $orderId
+                'order_id' => $orderId,
             ];
 
         } catch (\Exception $e) {
@@ -105,24 +107,21 @@ class DonationService
                 'user_id' => Auth::id(),
                 'amount' => $data['amount'] ?? null,
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
 
-            throw new \RuntimeException('Failed to create donation: ' . $e->getMessage());
+            throw new \RuntimeException('Failed to create donation: '.$e->getMessage());
         }
     }
 
     /**
      * Validate business rules before creating donation
      *
-     * @param Campaign $campaign
-     * @param array $data
      * @throws ValidationException
      */
     private function validateBusinessRules(Campaign $campaign, array $data)
     {
         $errors = [];
-
 
         // Validate campaign status
         if ($campaign->status !== Campaign::STATUS_ACTIVE) {
@@ -140,12 +139,12 @@ class DonationService
 
         // Validate donation amount
         $amount = $data['amount'] ?? 0;
-        if (!is_numeric($amount) || $amount < self::MIN_DONATION_AMOUNT) {
-            $errors['amount'] = 'Minimum donation amount is Rp ' . number_format(self::MIN_DONATION_AMOUNT);
+        if (! is_numeric($amount) || $amount < self::MIN_DONATION_AMOUNT) {
+            $errors['amount'] = 'Minimum donation amount is Rp '.number_format(self::MIN_DONATION_AMOUNT);
         }
 
         if ($amount > self::MAX_DONATION_AMOUNT) {
-            $errors['amount'] = 'Maximum donation amount is Rp ' . number_format(self::MAX_DONATION_AMOUNT);
+            $errors['amount'] = 'Maximum donation amount is Rp '.number_format(self::MAX_DONATION_AMOUNT);
         }
 
         // Validate user daily limits
@@ -168,7 +167,6 @@ class DonationService
             $errors['limit'] = 'Daily donation amount limit exceeded';
         }
 
-
         // Check for duplicate donations (same amount within 5 minutes)
         $recentDonation = Donation::query()
             ->where('user_id', '=', Auth::id())
@@ -181,7 +179,7 @@ class DonationService
             $errors['duplicate'] = 'Similar donation was made recently. Please wait before making another donation.';
         }
 
-        if (!empty($errors)) {
+        if (! empty($errors)) {
             throw ValidationException::withMessages($errors);
         }
     }
@@ -193,15 +191,17 @@ class DonationService
      */
     private function generateOrderId()
     {
-        $orderId = 'ORD-' . now()->format('YmdHis') . '-' . Str::random(6);
+        $orderId = 'ORD-'.now()->format('YmdHis').'-'.Str::random(6);
+
         return $orderId;
     }
 
     /**
      * Handle payment callback from Midtrans with comprehensive error handling and notifications
      *
-     * @param array $payload
+     * @param  array  $payload
      * @return Donation|null
+     *
      * @throws \Exception
      */
     public function handleCallback($payload)
@@ -219,12 +219,13 @@ class DonationService
             // Find donation with lock to prevent race conditions
             // Lock will be automatically released when transaction ends (commit/rollback)
             $donation = Donation::query()->where('order_id', '=', $orderId)->lockForUpdate()->first();
-            if (!$donation) {
+            if (! $donation) {
                 Log::error('Donation not found for callback', [
                     'order_id' => $orderId,
-                    'payload' => $payload
+                    'payload' => $payload,
                 ]);
                 DB::rollBack();
+
                 return null;
             }
 
@@ -233,7 +234,7 @@ class DonationService
                 'donation_id' => $donation->id,
                 'order_id' => $orderId,
                 'transaction_status' => $transactionStatus,
-                'payload' => $payload
+                'payload' => $payload,
             ]);
 
             $oldStatus = $donation->status;
@@ -260,7 +261,7 @@ class DonationService
                 default:
                     Log::warning('Unknown transaction status received', [
                         'donation_id' => $donation->id,
-                        'transaction_status' => $transactionStatus
+                        'transaction_status' => $transactionStatus,
                     ]);
             }
 
@@ -281,7 +282,7 @@ class DonationService
                 'order_id' => $orderId,
                 'old_status' => $oldStatus,
                 'new_status' => $donation->status,
-                'was_successful' => $wasSuccessful
+                'was_successful' => $wasSuccessful,
             ]);
 
             return $donation;
@@ -293,7 +294,7 @@ class DonationService
                 'order_id' => $payload['order_id'] ?? 'unknown',
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
-                'payload' => $payload
+                'payload' => $payload,
             ]);
 
             throw $e;
@@ -303,8 +304,8 @@ class DonationService
     /**
      * Create Snap payment link with error handling
      *
-     * @param Donation $donation
      * @return string
+     *
      * @throws \RuntimeException
      */
     private function createSnapLink(Donation $donation)
@@ -313,7 +314,7 @@ class DonationService
             $params = [
                 'transaction_details' => [
                     'order_id' => $donation->order_id,
-                    'gross_amount' => (int)$donation->amount,
+                    'gross_amount' => (int) $donation->amount,
                 ],
                 'customer_details' => [
                     'first_name' => $donation->user->name,
@@ -322,9 +323,9 @@ class DonationService
                 'item_details' => [
                     [
                         'id' => 'DONATION',
-                        'price' => (int)$donation->amount,
+                        'price' => (int) $donation->amount,
                         'quantity' => 1,
-                        'name' => 'Donation to ' . $donation->campaign->title,
+                        'name' => 'Donation to '.$donation->campaign->title,
                     ],
                 ],
                 'callbacks' => [
@@ -340,18 +341,18 @@ class DonationService
             Log::info('Creating Snap payment link', [
                 'donation_id' => $donation->id,
                 'order_id' => $donation->order_id,
-                'amount' => $donation->amount
+                'amount' => $donation->amount,
             ]);
 
             $snapUrl = Snap::getSnapUrl($params);
 
-            if (!$snapUrl) {
+            if (! $snapUrl) {
                 throw new \RuntimeException('Failed to generate Snap payment URL');
             }
 
             Log::info('Snap payment link created successfully', [
                 'donation_id' => $donation->id,
-                'order_id' => $donation->order_id
+                'order_id' => $donation->order_id,
             ]);
 
             return $snapUrl;
@@ -361,17 +362,15 @@ class DonationService
                 'donation_id' => $donation->id,
                 'order_id' => $donation->order_id,
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
 
-            throw new \RuntimeException('Failed to create payment link: ' . $e->getMessage());
+            throw new \RuntimeException('Failed to create payment link: '.$e->getMessage());
         }
     }
 
     /**
      * Update campaign statistics after successful donation
-     *
-     * @param Campaign $campaign
      */
     private function updateCampaignStatistics(Campaign $campaign)
     {
@@ -388,7 +387,7 @@ class DonationService
                 Log::info('Campaign target reached', [
                     'campaign_id' => $campaign->id,
                     'target_amount' => $campaign->target_amount,
-                    'total_donations' => $totalDonations
+                    'total_donations' => $totalDonations,
                 ]);
             }
 
@@ -396,22 +395,19 @@ class DonationService
                 'campaign_id' => $campaign->id,
                 'total_donations' => $totalDonations,
                 'donation_count' => $donationCount,
-                'progress_percentage' => ($totalDonations / $campaign->target_amount) * 100
+                'progress_percentage' => ($totalDonations / $campaign->target_amount) * 100,
             ]);
 
         } catch (\Exception $e) {
             Log::error('Failed to update campaign statistics', [
                 'campaign_id' => $campaign->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
         }
     }
 
     /**
      * Send notifications for donation status changes
-     *
-     * @param Donation $donation
-     * @param bool $wasSuccessful
      */
     private function sendDonationNotifications(Donation $donation, bool $wasSuccessful)
     {
@@ -434,21 +430,19 @@ class DonationService
 
             Log::info('Donation notifications sent', [
                 'donation_id' => $donation->id,
-                'was_successful' => $wasSuccessful
+                'was_successful' => $wasSuccessful,
             ]);
 
         } catch (\Exception $e) {
             Log::error('Failed to send donation notifications', [
                 'donation_id' => $donation->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
         }
     }
 
     /**
      * Send success notification to donor
-     *
-     * @param Donation $donation
      */
     private function sendDonationSuccessNotification(Donation $donation)
     {
@@ -460,21 +454,19 @@ class DonationService
                 'donor_email' => $donation->user->email,
                 'donor_name' => $donation->user->name,
                 'amount' => $donation->amount,
-                'campaign_title' => $donation->campaign->title
+                'campaign_title' => $donation->campaign->title,
             ]);
 
         } catch (\Exception $e) {
             Log::error('Failed to send success notification', [
                 'donation_id' => $donation->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
         }
     }
 
     /**
      * Send notification to campaign owner
-     *
-     * @param Donation $donation
      */
     private function sendCampaignOwnerNotification(Donation $donation)
     {
@@ -488,21 +480,19 @@ class DonationService
                 'owner_email' => $campaignOwner->email,
                 'owner_name' => $campaignOwner->name,
                 'donation_amount' => $donation->amount,
-                'donor_name' => $donation->is_anonymous ? 'Anonymous' : $donation->user->name
+                'donor_name' => $donation->is_anonymous ? 'Anonymous' : $donation->user->name,
             ]);
 
         } catch (\Exception $e) {
             Log::error('Failed to send campaign owner notification', [
                 'donation_id' => $donation->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
         }
     }
 
     /**
      * Send admin notification for large donations
-     *
-     * @param Donation $donation
      */
     private function sendAdminLargeDonationNotification(Donation $donation)
     {
@@ -512,7 +502,7 @@ class DonationService
 
             if ($adminEmail) {
                 // Create a temporary admin user for notification
-                $adminUser = new \App\Models\User();
+                $adminUser = new \App\Models\User;
                 $adminUser->email = $adminEmail;
                 $adminUser->name = 'Admin';
 
@@ -524,21 +514,19 @@ class DonationService
                 'amount' => $donation->amount,
                 'campaign_title' => $donation->campaign->title,
                 'donor_name' => $donation->is_anonymous ? 'Anonymous' : $donation->user->name,
-                'admin_email' => $adminEmail
+                'admin_email' => $adminEmail,
             ]);
 
         } catch (\Exception $e) {
             Log::error('Failed to send admin large donation notification', [
                 'donation_id' => $donation->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
         }
     }
 
     /**
      * Send failure notification to donor
-     *
-     * @param Donation $donation
      */
     private function sendDonationFailureNotification(Donation $donation)
     {
@@ -551,16 +539,14 @@ class DonationService
                 'donor_name' => $donation->user->name,
                 'amount' => $donation->amount,
                 'campaign_title' => $donation->campaign->title,
-                'status' => $donation->status
+                'status' => $donation->status,
             ]);
 
         } catch (\Exception $e) {
             Log::error('Failed to send failure notification', [
                 'donation_id' => $donation->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
         }
     }
-
 }
-

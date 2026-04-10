@@ -5,7 +5,6 @@ namespace App\Filament\Resources\Campaigns\Schemas;
 use App\Models\CampaignCategory;
 use App\Models\User;
 use Filament\Actions\Action;
-use Filament\Actions\SelectAction;
 use Filament\Forms\Components\Select;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\ImageEntry;
@@ -14,8 +13,6 @@ use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\Width;
-use Filament\Tables\Columns\SelectColumn;
-
 
 class CampaignInfolist
 {
@@ -46,17 +43,17 @@ class CampaignInfolist
                             ->label('Gambar Kampanye'),
                         TextEntry::make('campaign_category_id')
                             ->label('Kategori')
-                            ->formatStateUsing(fn($state) => CampaignCategory::find($state)?->name ?? 'Tidak ada kategori'),
+                            ->formatStateUsing(fn ($state) => CampaignCategory::find($state)?->name ?? 'Tidak ada kategori'),
                         TextEntry::make('user_id')
                             ->label('Pemilik')
-                            ->formatStateUsing(fn($state) => User::find($state)?->name ?? 'Tidak ada pemilik'),
+                            ->formatStateUsing(fn ($state) => User::find($state)?->name ?? 'Tidak ada pemilik'),
                         TextEntry::make('target_amount')
                             ->label('Target Dana')
                             ->money('IDR'),
                         TextEntry::make('status')
                             ->label('Status')
                             ->badge()
-                            ->color(fn(string $state): string => match ($state) {
+                            ->color(fn (string $state): string => match ($state) {
                                 '0' => 'gray',
                                 '1' => 'success',
                                 '2' => 'warning',
@@ -64,7 +61,7 @@ class CampaignInfolist
                                 '4' => 'danger',
                                 default => 'gray',
                             })
-                            ->formatStateUsing(fn(string $state): string => match ($state) {
+                            ->formatStateUsing(fn (string $state): string => match ($state) {
                                 '0' => 'Draft',
                                 '1' => 'Aktif',
                                 '2' => 'Paused',
@@ -92,7 +89,7 @@ class CampaignInfolist
                             ->dateTime('d M Y H:i'),
                         TextEntry::make('updated_at')
                             ->label('Diperbarui')
-                            ->dateTime('d M Y H:i')
+                            ->dateTime('d M Y H:i'),
                     ]),
             ]);
     }
@@ -113,7 +110,7 @@ class CampaignInfolist
                         '3' => 'Completed',
                         '4' => 'Cancelled',
                     ])
-                    ->required()
+                    ->required(),
             ])->action(function (array $data, $record) {
                 $record->status = $data['status'];
                 $record->save();

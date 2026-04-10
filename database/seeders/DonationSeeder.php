@@ -36,7 +36,7 @@ class DonationSeeder extends Seeder
                 $isAnonymous = rand(0, 1);
                 $paymentMethod = $paymentMethods[array_rand($paymentMethods)];
                 $paymentType = $paymentTypes[array_rand($paymentTypes)];
-                
+
                 $donation = Donation::create([
                     'campaign_id' => $campaign->id,
                     'user_id' => $user->id,
@@ -45,7 +45,7 @@ class DonationSeeder extends Seeder
                     'status' => $status,
                     'is_anonymous' => $isAnonymous,
                     'message' => $this->getRandomMessage(),
-                    'order_id' => 'ORD-' . time() . '-' . rand(1000, 9999),
+                    'order_id' => 'ORD-'.time().'-'.rand(1000, 9999),
                     'payment_type' => $paymentType,
                     'paid_at' => $status == 1 ? now()->subDays(rand(1, 30)) : null,
                 ]);
@@ -70,7 +70,7 @@ class DonationSeeder extends Seeder
             'Semoga menjadi ladang pahala',
             'Doa untuk kebaikan semua pihak',
             null, // Sometimes no message
-            null
+            null,
         ];
 
         return $messages[array_rand($messages)];

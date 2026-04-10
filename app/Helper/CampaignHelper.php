@@ -72,7 +72,7 @@ class CampaignHelper
         return [
             'text' => self::getStatusText($status),
             'class' => self::getStatusClass($status),
-            'icon' => self::getStatusIcon($status)
+            'icon' => self::getStatusIcon($status),
         ];
     }
 
@@ -133,7 +133,7 @@ class CampaignHelper
      */
     public static function getDaysLeft(?\DateTime $endDate): int
     {
-        if (!$endDate) {
+        if (! $endDate) {
             return 0;
         }
 
@@ -149,7 +149,7 @@ class CampaignHelper
             'percent' => self::getProgressPercent($campaign->total_donations, $campaign->target_amount),
             'days_left' => self::getDaysLeft($campaign->end_date),
             'progress_class' => self::getProgressClass($campaign->status),
-            'formatted_percent' => number_format(self::getProgressPercent($campaign->total_donations, $campaign->target_amount), 1)
+            'formatted_percent' => number_format(self::getProgressPercent($campaign->total_donations, $campaign->target_amount), 1),
         ];
     }
 
@@ -158,6 +158,6 @@ class CampaignHelper
      */
     public static function getImageUrl(?string $image): string
     {
-        return $image ? asset('storage/' . $image) : asset('images/indonesia.jpg');
+        return $image ? asset('storage/'.$image) : asset('images/indonesia.jpg');
     }
 }

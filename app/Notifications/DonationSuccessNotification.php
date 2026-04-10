@@ -39,9 +39,9 @@ class DonationSuccessNotification extends Notification implements ShouldQueue
     {
         $campaign = $this->donation->campaign;
         $donor = $this->donation->user;
-        
+
         return (new MailMessage)
-            ->subject('Terima Kasih! Donasi Anda Berhasil - ' . $campaign->title)
+            ->subject('Terima Kasih! Donasi Anda Berhasil - '.$campaign->title)
             ->view('emails.notifications.donation-success', [
                 'donation' => $this->donation,
                 'donor' => $donor,

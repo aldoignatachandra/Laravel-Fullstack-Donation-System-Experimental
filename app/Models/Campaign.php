@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Campaign extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'campaign_category_id',
         'user_id',
@@ -76,7 +77,6 @@ class Campaign extends Model
         return $this->hasMany(Donation::class);
     }
 
-
     public function attachments(): MorphMany
     {
         return $this->morphMany(Attachment::class, 'attachable');
@@ -105,6 +105,4 @@ class Campaign extends Model
     {
         return $this->donations()->where('status', 1)->sum('amount');
     }
-
-
 }

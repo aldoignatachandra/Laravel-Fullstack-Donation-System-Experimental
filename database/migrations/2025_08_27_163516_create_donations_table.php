@@ -25,7 +25,7 @@ return new class extends Migration
 
             // payment details
             $table->string('order_id')->unique();
-            $table->string('payment_type');     
+            $table->string('payment_type');
             $table->dateTime('paid_at')->nullable();
             $table->timestamps();
         });

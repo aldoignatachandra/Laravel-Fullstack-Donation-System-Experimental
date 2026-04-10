@@ -2,14 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Database\Seeders\CampaignArticleSeeder;
-use Database\Seeders\CampaignCategorySeeder;
-use Database\Seeders\CampaignSeeder;
-use Database\Seeders\DonationSeeder;
-use Database\Seeders\UserSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder

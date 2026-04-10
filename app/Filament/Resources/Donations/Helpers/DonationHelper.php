@@ -27,5 +27,4 @@ class DonationHelper
             default => 'gray',
         };
     }
-
 }

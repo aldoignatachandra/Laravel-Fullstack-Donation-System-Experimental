@@ -55,7 +55,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentShieldPlugin::make()
-                    ->navigationGroup('User Management')
+                    ->navigationGroup('User Management'),
             ])
             ->authMiddleware([
                 Authenticate::class,
