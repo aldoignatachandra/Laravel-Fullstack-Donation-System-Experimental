@@ -27,7 +27,6 @@ class MidtransController extends Controller
                 'status' => 'error',
                 'message' => 'Donation not found',
             ], 404);
-
         } catch (\Exception $e) {
             Log::error('Midtrans Callback error:', [
                 'error' => $e->getMessage(),

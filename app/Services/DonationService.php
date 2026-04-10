@@ -97,7 +97,6 @@ class DonationService
                 'donation_id' => $donation->id,
                 'order_id' => $orderId,
             ];
-
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -243,6 +242,7 @@ class DonationService
             // Update donation status based on transaction status
             switch ($transactionStatus) {
                 case 'settlement':
+                case 'capture':
                     $donation->status = Donation::STATUS_PAID;
                     $donation->paid_at = now();
                     $wasSuccessful = true;
@@ -286,7 +286,6 @@ class DonationService
             ]);
 
             return $donation;
-
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -356,7 +355,6 @@ class DonationService
             ]);
 
             return $snapUrl;
-
         } catch (\Exception $e) {
             Log::error('Failed to create Snap payment link', [
                 'donation_id' => $donation->id,
@@ -397,7 +395,6 @@ class DonationService
                 'donation_count' => $donationCount,
                 'progress_percentage' => ($totalDonations / $campaign->target_amount) * 100,
             ]);
-
         } catch (\Exception $e) {
             Log::error('Failed to update campaign statistics', [
                 'campaign_id' => $campaign->id,
@@ -432,7 +429,6 @@ class DonationService
                 'donation_id' => $donation->id,
                 'was_successful' => $wasSuccessful,
             ]);
-
         } catch (\Exception $e) {
             Log::error('Failed to send donation notifications', [
                 'donation_id' => $donation->id,
@@ -456,7 +452,6 @@ class DonationService
                 'amount' => $donation->amount,
                 'campaign_title' => $donation->campaign->title,
             ]);
-
         } catch (\Exception $e) {
             Log::error('Failed to send success notification', [
                 'donation_id' => $donation->id,
@@ -482,7 +477,6 @@ class DonationService
                 'donation_amount' => $donation->amount,
                 'donor_name' => $donation->is_anonymous ? 'Anonymous' : $donation->user->name,
             ]);
-
         } catch (\Exception $e) {
             Log::error('Failed to send campaign owner notification', [
                 'donation_id' => $donation->id,
@@ -516,7 +510,6 @@ class DonationService
                 'donor_name' => $donation->is_anonymous ? 'Anonymous' : $donation->user->name,
                 'admin_email' => $adminEmail,
             ]);
-
         } catch (\Exception $e) {
             Log::error('Failed to send admin large donation notification', [
                 'donation_id' => $donation->id,
@@ -541,7 +534,6 @@ class DonationService
                 'campaign_title' => $donation->campaign->title,
                 'status' => $donation->status,
             ]);
-
         } catch (\Exception $e) {
             Log::error('Failed to send failure notification', [
                 'donation_id' => $donation->id,

@@ -20,6 +20,8 @@ class Donations extends Component
 
     public $statusFilter = '';
 
+    public ?Donation $selectedDonation = null;
+
     /**
      * Mount the component.
      */
@@ -96,6 +98,25 @@ class Donations extends Component
     public function updatedStatusFilter()
     {
         $this->resetPage();
+    }
+
+    /**
+     * Show donation details modal.
+     */
+    public function showDonationDetails($donationId): void
+    {
+        $this->selectedDonation = Donation::with(['campaign'])
+            ->where('user_id', Auth::id())
+            ->where('id', $donationId)
+            ->first();
+    }
+
+    /**
+     * Close donation details modal.
+     */
+    public function closeDonationDetails(): void
+    {
+        $this->selectedDonation = null;
     }
 
     /**

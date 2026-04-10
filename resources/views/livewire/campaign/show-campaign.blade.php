@@ -229,17 +229,20 @@
                     </div>
 
                     <div class="space-y-3">
-                        @forelse($campaign->donations->take(5) as $donation)
+                        @forelse($campaign->donations as $donation)
+                            @php
+                                $donorName = $donation->is_anonymous ? 'Hamba Allah' : ($donation->user->name ?? 'Anonymous');
+                                $initial = strtoupper(mb_substr($donorName, 0, 1));
+                            @endphp
                             <div
                                 class="flex items-center gap-3 p-3 bg-gray-50 bg-gray-100 rounded-2xl hover:bg-gray-100 dark:hover:bg-slate-600 transition-colors">
                                 <div
                                     class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center flex-shrink-0">
-                                    <span
-                                        class="text-white font-bold text-sm">{{ strtoupper(mb_substr($donation->donor_name ?? 'A', 0, 1)) }}</span>
+                                    <span class="text-white font-bold text-sm">{{ $initial }}</span>
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <div class="flex items-center gap-2 mb-1">
-                                        <p class="font-semibold text-gray-900 text-gray-900 truncate">{{ $donation->donor_name ?? 'Anonymous' }}</p>
+                                        <p class="font-semibold text-gray-900 text-gray-900 truncate">{{ $donorName }}</p>
                                         @if($donation->is_anonymous)
                                             <span class="text-xs text-gray-500 dark:text-slate-400">(Anonim)</span>
                                         @endif
@@ -278,7 +281,7 @@
                         @endforelse
                     </div>
 
-                    @if($campaign->donations_count > 5)
+                    @if($campaign->donations_count > 10)
                         <div class="mt-4 pt-4 border-t border-gray-100 border-gray-200">
                             <button
                                 class="w-full text-center text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium">

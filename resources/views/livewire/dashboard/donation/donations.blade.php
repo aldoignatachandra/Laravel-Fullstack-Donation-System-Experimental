@@ -122,9 +122,16 @@
                     <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                         {{-- Left: Campaign Info --}}
                         <div class="flex-1">
-                            <h3 class="text-xl font-bold text-slate-900 mb-2">
+                            {{-- Campaign Title as Clickable Badge --}}
+                            <a href="{{ route('campaign.show', $donation->campaign->slug) }}"
+                                class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-medium border border-emerald-200 hover:bg-emerald-100 transition mb-3">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z">
+                                    </path>
+                                </svg>
                                 {{ $donation->campaign->title }}
-                            </h3>
+                            </a>
 
                             @if ($donation->message)
                                 <div class="mt-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
@@ -176,6 +183,16 @@
                                     </svg>
                                     Lanjutkan Pembayaran
                                 </a>
+                            @elseif ($donation->status === \App\Models\Donation::STATUS_PAID)
+                                <button wire:click="showDonationDetails({{ $donation->id }})"
+                                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-100 text-emerald-700 rounded-xl font-semibold text-sm hover:bg-emerald-200 transition shadow-md border border-emerald-200">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                        </path>
+                                    </svg>
+                                    Detail Donasi
+                                </button>
                             @endif
                         </div>
                     </div>
@@ -290,6 +307,125 @@
                 {{-- Page Info --}}
                 <div class="text-sm text-slate-600">
                     Menampilkan <span class="font-semibold">{{ $donations->firstItem() }}-{{ $donations->lastItem() }}</span> dari <span class="font-semibold">{{ $donations->total() }}</span> donasi
+                </div>
+            </div>
+        </div>
+    @endif
+
+    {{-- Compact Donation Details Modal --}}
+    @if($selectedDonation)
+        <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            {{-- Backdrop --}}
+            <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" aria-hidden="true"
+                wire:click="closeDonationDetails"></div>
+
+            {{-- Modal Container --}}
+            <div class="flex min-h-full items-center justify-center p-4">
+                {{-- Modal Panel --}}
+                <div class="relative bg-white rounded-2xl text-left overflow-hidden shadow-2xl w-full max-w-md">
+                    {{-- Modal Header --}}
+                    <div class="bg-emerald-600 px-5 py-3 flex items-center justify-between">
+                        <h3 class="text-base font-bold text-white" id="modal-title">Detail Donasi</h3>
+                        <button wire:click="closeDonationDetails"
+                            class="text-white/80 hover:text-white transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    {{-- Modal Body - Compact Layout --}}
+                    <div class="px-5 py-4">
+                        {{-- Status & Campaign Row --}}
+                        <div class="flex items-center justify-between mb-4">
+                            <div
+                                class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold border border-emerald-200">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Berhasil
+                            </div>
+                            <span class="text-xs text-slate-400">{{ $selectedDonation->order_id }}</span>
+                        </div>
+
+                        {{-- Campaign Badge Link --}}
+                        <a href="{{ route('campaign.show', $selectedDonation->campaign->slug) }}"
+                            class="block mb-4 group">
+                            <span class="text-xs text-slate-500 block mb-1">Campaign</span>
+                            <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-medium border border-emerald-200 group-hover:bg-emerald-100 transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                </svg>
+                                {{ $selectedDonation->campaign->title }}
+                            </div>
+                        </a>
+
+                        {{-- Amount --}}
+                        <div class="bg-emerald-50 rounded-xl p-4 text-center mb-4 border border-emerald-100">
+                            <p class="text-xs text-slate-500 mb-1">Jumlah Donasi</p>
+                            <p class="text-2xl font-bold text-emerald-700">
+                                {{ \App\Helper\NumberHelper::formatIDR($selectedDonation->amount) }}
+                            </p>
+                        </div>
+
+                        {{-- Compact Details Grid --}}
+                        <div class="grid grid-cols-2 gap-3 text-sm">
+                            <div class="bg-slate-50 rounded-lg p-3">
+                                <span class="text-xs text-slate-400 block mb-1">Tanggal Donasi</span>
+                                <span class="font-medium text-slate-700">{{ $this->formatDate($selectedDonation->created_at) }}</span>
+                            </div>
+
+                            <div class="bg-slate-50 rounded-lg p-3">
+                                <span class="text-xs text-slate-400 block mb-1">Tanggal Bayar</span>
+                                <span class="font-medium text-emerald-600">{{ $this->formatDate($selectedDonation->paid_at) }}</span>
+                            </div>
+
+                            <div class="bg-slate-50 rounded-lg p-3">
+                                <span class="text-xs text-slate-400 block mb-1">Metode</span>
+                                <span class="font-medium text-slate-700">Midtrans</span>
+                            </div>
+
+                            <div class="bg-slate-50 rounded-lg p-3">
+                                <span class="text-xs text-slate-400 block mb-1">Status</span>
+                                <span class="font-medium text-emerald-600">Lunas</span>
+                            </div>
+
+                            <div class="bg-slate-50 rounded-lg p-3">
+                                <span class="text-xs text-slate-400 block mb-1">Anonim</span>
+                                <span class="font-medium text-slate-700">{{ $selectedDonation->is_anonymous ? 'Ya' : 'Tidak' }}</span>
+                            </div>
+
+                            @if ($selectedDonation->message)
+                                <div class="col-span-2 bg-slate-50 rounded-lg p-3">
+                                    <span class="text-xs text-slate-400 block mb-1">Pesan</span>
+                                    <p class="text-sm text-slate-600 italic">"{{ $selectedDonation->message }}"</p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    {{-- Modal Footer --}}
+                    <div class="bg-slate-50 px-5 py-3 flex justify-between items-center border-t border-slate-100">
+                        <a href="{{ route('campaign.show', $selectedDonation->campaign->slug) }}"
+                            class="inline-flex items-center gap-1.5 text-sm text-emerald-600 font-medium hover:text-emerald-700 transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                            </svg>
+                            Lihat Campaign
+                        </a>
+                        <button wire:click="closeDonationDetails"
+                            class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 text-white rounded-lg font-medium text-sm hover:bg-slate-800 transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Tutup
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

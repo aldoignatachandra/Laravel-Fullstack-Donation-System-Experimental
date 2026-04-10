@@ -58,8 +58,57 @@ class DonationForm extends Component
         $this->setCustomAmount();
     }
 
+    /**
+     * Real-time validation for message field with debounce.
+     */
+    public function updatedMessage($value): void
+    {
+        if (strlen($value) > 500) {
+            $this->addError('message', 'Pesan tidak boleh lebih dari 500 karakter.');
+        } else {
+            $this->resetErrorBag('message');
+        }
+    }
+
+    public $showErrorModal = false;
+
+    public $errorModalMessage = '';
+
+    public $errorModalTitle = '';
+
     public function proceedToPayment()
     {
+        // Custom validation before proceeding
+        $cleanAmount = (int) str_replace(['.', ','], '', $this->customAmount);
+
+        // Check if amount is valid integer
+        if (! is_numeric($cleanAmount) || $cleanAmount <= 0) {
+            $this->errorModalTitle = 'Nominal Tidak Valid';
+            $this->errorModalMessage = 'Masukkan nominal donasi yang valid dalam bentuk angka.';
+            $this->showErrorModal = true;
+
+            return;
+        }
+
+        // Check if amount is below minimum
+        if ($cleanAmount < DonationService::MIN_DONATION_AMOUNT) {
+            $this->errorModalTitle = 'Nominal Terlalu Kecil';
+            $this->errorModalMessage = 'Minimal donasi adalah Rp 10.000. Silakan masukkan nominal yang lebih besar.';
+            $this->showErrorModal = true;
+
+            return;
+        }
+
+        // Check if amount exceeds maximum
+        if ($cleanAmount > DonationService::MAX_DONATION_AMOUNT) {
+            $this->errorModalTitle = 'Nominal Terlalu Besar';
+            $this->errorModalMessage = 'Maksimal donasi per transaksi adalah Rp 100.000.000. Silakan masukkan nominal yang lebih kecil atau hubungi admin untuk donasi besar.';
+            $this->showErrorModal = true;
+
+            return;
+        }
+
+        $this->selectedAmount = $cleanAmount;
         $this->validate();
 
         // Process the donation
@@ -75,7 +124,9 @@ class DonationForm extends Component
                 // Redirect externally to payment page (Snap)
                 return redirect()->away($result['snap_url']);
             } else {
-                $this->addError('donation', 'Failed to process donation. Please try again.');
+                $this->errorModalTitle = 'Terjadi Kesalahan';
+                $this->errorModalMessage = 'Gagal memproses donasi. Silakan coba lagi.';
+                $this->showErrorModal = true;
 
                 return;
             }
@@ -89,7 +140,9 @@ class DonationForm extends Component
             }
         } catch (\Exception $e) {
             // Handle other errors
-            $this->addError('donation', 'An error occurred while processing your donation. Please try again later.');
+            $this->errorModalTitle = 'Terjadi Kesalahan';
+            $this->errorModalMessage = 'Terjadi kesalahan saat memproses donasi Anda. Silakan coba lagi nanti.';
+            $this->showErrorModal = true;
             Log::error('Donation form error', [
                 'campaign_id' => $this->campaign->id,
                 'user_id' => Auth::id(),
@@ -97,6 +150,13 @@ class DonationForm extends Component
                 'error' => $e->getMessage(),
             ]);
         }
+    }
+
+    public function closeErrorModal()
+    {
+        $this->showErrorModal = false;
+        $this->errorModalMessage = '';
+        $this->errorModalTitle = '';
     }
 
     #[Layout('components.layouts.beramal')]

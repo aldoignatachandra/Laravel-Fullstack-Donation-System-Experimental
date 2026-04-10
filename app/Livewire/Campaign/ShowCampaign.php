@@ -27,11 +27,19 @@ class ShowCampaign extends Component
     {
         $this->campaign = Campaign::query()
             ->where('slug', '=', $this->slug)
-            ->with(['category', 'donations'])
+            ->with(['category'])
+            ->with(['donations' => function ($q) {
+                $q->where('status', \App\Models\Donation::STATUS_PAID)
+                    ->with('user')
+                    ->latest()
+                    ->take(10);
+            }])
             ->with(['articles' => function ($q) {
                 $q->latest()->take(5)->with('author');
             }])
-            ->withCount('donations')
+            ->withCount(['donations' => function ($q) {
+                $q->where('status', \App\Models\Donation::STATUS_PAID);
+            }])
             ->where('status', Campaign::STATUS_ACTIVE)
             ->firstOrFail();
     }
