@@ -11,11 +11,7 @@ use Livewire\Volt\Volt;
 Route::get('/', LandingPage::class)->name('home');
 Route::get('/campaign/{slug}', ShowCampaign::class)->name('campaign.show');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/campaign/{slug}/donate', DonationForm::class)->name('campaign.donate');
     Route::get('/donation/payment', function () {
         return view('donation.payment');
@@ -28,7 +24,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('donations', Donations::class)->name('donations');
         Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
         Volt::route('settings/password', 'settings.password')->name('settings.password');
-        Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
     });
 
 });

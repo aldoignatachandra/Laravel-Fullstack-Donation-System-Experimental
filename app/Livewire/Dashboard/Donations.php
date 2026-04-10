@@ -5,10 +5,12 @@ namespace App\Livewire\Dashboard;
 use App\Filament\Resources\Donations\Helpers\DonationHelper;
 use App\Models\Donation;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+#[Layout('components.layouts.dashboard')]
 #[Title('Daftar Donasi Saya')]
 class Donations extends Component
 {
