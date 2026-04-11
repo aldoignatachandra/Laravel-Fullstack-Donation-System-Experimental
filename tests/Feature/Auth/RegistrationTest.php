@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\ShieldSeeder;
 use Livewire\Volt\Volt;
 
 test('registration screen can be rendered', function () {
@@ -9,6 +10,9 @@ test('registration screen can be rendered', function () {
 });
 
 test('new users can register', function () {
+    // Seed roles before registration
+    $this->seed(ShieldSeeder::class);
+
     $response = Volt::test('auth.register')
         ->set('name', 'Test User')
         ->set('email', 'test@example.com')
