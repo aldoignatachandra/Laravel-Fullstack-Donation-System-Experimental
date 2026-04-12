@@ -61,6 +61,7 @@
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
+            "@php -r \"echo PHP_EOL . '  DonasiKita' . PHP_EOL . PHP_EOL; echo '  API Docs:    http://localhost:8000/api/documentation' . PHP_EOL; echo '  OpenAPI JSON: http://localhost:8000/docs' . PHP_EOL . PHP_EOL;\"",
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite --kill-others"
         ],
         "test": [
