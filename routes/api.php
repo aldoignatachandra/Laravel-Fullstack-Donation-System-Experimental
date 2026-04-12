@@ -1,11 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\CurrentUserController;
 use App\Http\Controllers\MidtransController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::get('/user', CurrentUserController::class)->middleware('auth:sanctum');
 
 Route::post('webhook/midtrans', [MidtransController::class, 'callback']);
