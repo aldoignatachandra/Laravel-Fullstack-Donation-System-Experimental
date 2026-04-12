@@ -146,7 +146,7 @@ Route::get('/dashboard', Dashboard::class)
     ->middleware(['auth', 'verified']);
 
 Route::get('/campaign/{slug}/donate', DonationForm::class)
-    ->middleware(['auth']);
+    ->middleware(['auth', 'verified']);
 
 // Admin panel (Filament)
 // Protected by Filament's built-in auth + Shield

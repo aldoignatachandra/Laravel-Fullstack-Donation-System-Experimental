@@ -9,9 +9,9 @@ DonasiKita uses a modern frontend stack combining Laravel Blade, Livewire, and T
 | Technology | Purpose | Version |
 |------------|---------|---------|
 | Livewire | Reactive components | 3.x |
-| Livewire Volt | Single-file components | 1.7 |
-| Flux UI | UI component library | 2.1 |
-| Tailwind CSS | Utility-first CSS | 3.x |
+| Livewire Volt | Single-file components | 1.7.x |
+| Flux UI | UI component library | 2.3.x |
+| Tailwind CSS | Utility-first CSS | 4.x |
 | Alpine.js | JavaScript interactions | Included with Livewire |
 | Vite | Build tool | Latest |
 
@@ -201,28 +201,29 @@ class LandingPage extends Component
 
 ## Styling with Tailwind CSS
 
-### Custom Configuration
+### CSS-first Configuration (Tailwind v4)
 
-```javascript
-// tailwind.config.js
-export default {
-    content: [
-        './resources/**/*.blade.php',
-        './resources/**/*.js',
-    ],
-    theme: {
-        extend: {
-            colors: {
-                primary: {
-                    50: '#ecfdf5',
-                    500: '#10b981',
-                    600: '#059669',
-                    700: '#047857',
-                },
-            },
-        },
-    },
+```css
+/* resources/css/app.css */
+@import 'tailwindcss';
+
+@source '../views';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
 }
+```
+
+```js
+// vite.config.js
+import tailwindcss from '@tailwindcss/vite';
+
+export default defineConfig({
+    plugins: [
+        laravel(['resources/css/app.css', 'resources/js/app.js']),
+        tailwindcss(),
+    ],
+});
 ```
 
 ### Common Patterns

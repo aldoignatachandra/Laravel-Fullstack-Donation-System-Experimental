@@ -355,7 +355,7 @@ public function status(): DonationStatus
 
 **Files:**
 - [ ] `app/Services/DonationService.php` - All methods
-- [ ] `app/Services/CampaignService.php` - All methods
+- [ ] `app/Http/Controllers/MidtransController.php` - Callback flow methods
 - [ ] `app/Livewire/Campaign/DonationForm.php` - All methods
 - [ ] `app/Livewire/Campaign/ShowCampaign.php` - All methods
 - [ ] All Helper classes
@@ -515,7 +515,7 @@ class DonationServiceProvider extends ServiceProvider
 - [ ] All PHP files in `app/`
 
 **Tasks:**
-- [ ] Run `composer format` (Pint handles this automatically)
+- [ ] Run `vendor/bin/pint` (Pint handles this automatically)
 - [ ] Or run `vendor/bin/pint --dirty`
 - [ ] Verify no unused imports remain
 
@@ -529,7 +529,7 @@ class DonationServiceProvider extends ServiceProvider
 - [ ] All PHP files
 
 **Tasks:**
-- [ ] Run `composer format` to fix all style issues
+- [ ] Run `vendor/bin/pint` to fix all style issues
 - [ ] Configure Pint rules if needed in `pint.json`
 - [ ] Add pre-commit hook to run Pint automatically
 
@@ -661,7 +661,7 @@ Overall: [X/18] completed
 - [PHP 8.4 Features](https://www.php.net/releases/8.4/en.php)
 
 ### Code Quality Tools
-- **Laravel Pint:** Code style fixer (`composer format`)
+- **Laravel Pint:** Code style fixer (`vendor/bin/pint`)
 - **PHPStan:** Static analysis (level 8 recommended)
 - **Rector:** Automated refactoring
 

@@ -31,7 +31,7 @@
         <env name="DB_CONNECTION" value="sqlite"/>
         <env name="DB_DATABASE" value=":memory:"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
-        <env name="CACHE_DRIVER" value="array"/>
+        <env name="CACHE_STORE" value="array"/>
         <env name="MAIL_MAILER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
@@ -57,7 +57,7 @@ php artisan test
 php artisan test --coverage
 
 # Run specific test file
-php artisan test tests/Feature/DonationTest.php
+php artisan test tests/Feature/CampaignPageTest.php
 
 # Run specific test method
 php artisan test --filter=test_user_can_create_donation
@@ -70,16 +70,19 @@ php artisan test --parallel
 
 ```
 tests/
-├── Feature/                    # Integration tests
+├── Feature/                   # Integration tests
 │   ├── Auth/                  # Authentication tests
-│   ├── Livewire/              # Livewire component tests
-│   ├── Http/                  # Controller tests
-│   └── Services/              # Service layer tests
+│   ├── Settings/              # User settings tests
+│   ├── CampaignPageTest.php
+│   └── DashboardTest.php
 ├── Unit/                      # Unit tests
-│   ├── Models/               # Model tests
-│   └── Helpers/              # Helper tests
-├── TestCase.php              # Base test class
-└── CreatesApplication.php    # Application bootstrap
+│   ├── Models/                # Model tests
+│   ├── Services/              # Service tests
+│   ├── Livewire/              # Livewire component tests
+│   ├── Notifications/         # Notification tests
+│   └── Helper/                # Helper tests
+├── Pest.php                   # Pest bootstrap/config
+└── TestCase.php               # Base test class
 ```
 
 ## Example Tests

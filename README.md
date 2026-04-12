@@ -3,9 +3,9 @@
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![PHP](https://img.shields.io/badge/PHP-8.4+-777BB4?logo=php&logoColor=white)
 ![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?logo=laravel&logoColor=white)
-![Filament](https://img.shields.io/badge/Filament-4.0-FFA500)
+![Filament](https://img.shields.io/badge/Filament-4.x-FFA500)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0+-4479A1?logo=mysql&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/Tailwind-3.x-06B6D4?logo=tailwindcss&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind-4.x-06B6D4?logo=tailwindcss&logoColor=white)
 
 A donation platform built with **Laravel 12 + Filament 4**. This application allows users to browse donation campaigns, make contributions, and track their donation history. Features include campaign management, real-time payment processing with Midtrans, and a comprehensive admin panel.
 
@@ -75,8 +75,7 @@ Personal dashboard showing donation statistics, recent donations with status tra
 - **Anonymous Donations** - Option to hide donor identity
 - **Campaign Updates** - Article system for campaign progress updates
 - **Responsive Design** - Tailwind CSS with custom components
-- **Soft Deletes** - Data safety with soft delete on domain models
-- **Laravel Breeze Authentication** - Login, register, password reset
+- **Authentication System** - Built-in auth flow via Livewire starter stack (Volt + session auth)
 - **Custom Admin Login** - Styled Filament login page
 
 ---
@@ -89,7 +88,7 @@ Personal dashboard showing donation statistics, recent donations with status tra
 graph TD
     subgraph Public
         D[Donor] -->|Browse| F[Frontend /]
-        F -->|Search| CS[CampaignService]
+        F -->|Search| CM[Campaign Model]
     end
 
     subgraph Donor_Area
@@ -104,7 +103,6 @@ graph TD
         FP --> UR[UserResource]
     end
 
-    CS --> CM[Campaign Model]
     DF --> DS[DonationService]
     DS --> MS[MidtransService]
 
@@ -152,9 +150,8 @@ donasikita-project/
 │   │       └── Users/
 │   ├── Http/
 │   │   ├── Controllers/
-│   │   │   ├── FrontController.php       # Public pages
-│   │   │   ├── MidtransController.php    # Payment webhook
-│   │   │   └── Auth/                     # Breeze auth controllers
+│   │   │   ├── MidtransController.php    # Payment webhook callback
+│   │   │   └── Auth/                     # Auth controllers (email verification, etc.)
 │   │   └── Requests/                     # Form requests
 │   ├── Livewire/
 │   │   ├── Campaign/                     # Campaign components
@@ -162,7 +159,7 @@ donasikita-project/
 │   │   │   └── ShowCampaign.php
 │   │   ├── Dashboard/                    # Dashboard components
 │   │   │   └── Donations.php
-│   │   └── Landing/                      # Landing page components
+│   │   └── LandingPage.php               # Landing page component
 │   ├── Models/
 │   │   ├── User.php
 │   │   ├── Campaign.php
@@ -171,7 +168,6 @@ donasikita-project/
 │   │   ├── Donation.php
 │   │   └── Attachment.php
 │   ├── Services/
-│   │   ├── CampaignService.php      # Campaign operations
 │   │   └── DonationService.php      # Donation processing
 │   └── Providers/
 │       └── Filament/
@@ -201,7 +197,7 @@ donasikita-project/
 ├── composer.json                   # PHP dependencies
 ├── package.json                    # Node dependencies
 ├── phpunit.xml                     # Test configuration
-└── tailwind.config.js              # Tailwind configuration
+└── vite.config.js                  # Vite + Tailwind CSS v4 plugin config
 ```
 
 ---
@@ -332,9 +328,7 @@ npm run build
 | ---------------------------------------- | -------------------------------------------------------- |
 | `composer install`                       | Install PHP dependencies                                 |
 | `composer dev`                           | Run full dev environment (Laravel + Queue + Logs + Vite) |
-| `composer format`                        | Run Laravel Pint (code style fixer)                      |
-| `composer format:check`                  | Check code style without fixing                          |
-| `composer test`                          | Run PHPUnit tests                                        |
+| `composer test`                          | Run test suite (Pest via `php artisan test`)             |
 | `composer test:coverage`                 | Run tests with coverage report                           |
 | `composer test:coverage-html`            | Generate HTML coverage report                            |
 | `composer test:coverage-min`             | Run tests with coverage (min 80%)                        |
@@ -348,6 +342,7 @@ npm run build
 | `php artisan storage:link`               | Create storage symlink                                   |
 | `php artisan route:list`                 | List all routes                                          |
 | `php artisan pail`                       | Monitor application logs                                 |
+| `vendor/bin/pint --dirty`               | Format changed PHP files                                 |
 
 ---
 
@@ -357,9 +352,9 @@ npm run build
 
 | Route                         | Controller/Component    | Description             |
 | ----------------------------- | ----------------------- | ----------------------- |
-| `GET /`                       | `Landing\Home`          | Homepage with campaigns |
+| `GET /`                       | `LandingPage`           | Homepage with campaigns |
 | `GET /campaign/{slug}`        | `Campaign\ShowCampaign` | Campaign detail page    |
-| `GET /campaign/{slug}/donate` | `Campaign\DonationForm` | Donation form           |
+| `GET /campaign/{slug}/donate` | `Campaign\DonationForm` | Donation form (auth + verified) |
 
 ### Authenticated Routes
 
@@ -383,17 +378,17 @@ npm run build
 Controllers are kept thin - business logic lives in Services:
 
 ```php
-class CampaignController extends Controller
+class MidtransController extends Controller
 {
-    public function __construct(
-        private CampaignService $campaignService,
-        private DonationService $donationService
-    ) {}
-
-    public function show($slug)
+    public function callback(Request $request)
     {
-        $campaign = $this->campaignService->getBySlug($slug);
-        return view('campaign.show', compact('campaign'));
+        $donation = app(DonationService::class)->handleCallback($request->all());
+
+        if (!$donation) {
+            return response()->json(['status' => 'error'], 404);
+        }
+
+        return response()->json(['status' => 'success']);
     }
 }
 ```
@@ -492,7 +487,7 @@ tests/
 
 This project aims for **80%+ code coverage**. Key areas to test:
 
-- **Services**: Business logic in DonationService, CampaignService
+- **Services**: Business logic in DonationService
 - **Models**: Relationships, scopes, accessors
 - **Feature Tests**: HTTP endpoints, Livewire components
 
@@ -576,7 +571,7 @@ This project is actively being developed. The following features are planned for
 
 | Feature                    | Description                                                                                                                        | Priority |
 | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| **Test Coverage**          | Comprehensive unit and feature tests for Services, Controllers, and Models using PHPUnit. Aim for 70%+ code coverage.              | High     |
+| **Test Coverage**          | Comprehensive unit and feature tests for Services, Controllers, and Models (Pest + PHPUnit engine). Aim for 70%+ code coverage.    | High     |
 | **Reward System**          | Point-based loyalty program for donors who make regular contributions. Users can earn points redeemable for badges or recognition. | Medium   |
 | **Campaign Analytics**     | Detailed analytics dashboard for campaign owners showing donation trends, donor demographics, and engagement metrics.              | Medium   |
 | **Recurring Donations**    | Subscription-based donation system allowing users to set up monthly/weekly automatic contributions.                                | High     |

@@ -22,7 +22,7 @@
 13. ⬜ Add Events/Listeners
 
 ### Phase 4 (Polish) - 2-3 hours
-14. ✅ Run `composer format` (auto)
+14. ✅ Run `vendor/bin/pint` (auto)
 15. ⬜ Standardize code style
 16. ⬜ Add property type declarations
 17. ⬜ Refactor helpers
@@ -49,7 +49,7 @@
 vendor/bin/pint --test
 
 # Fix code style
-composer format
+vendor/bin/pint
 
 # Run tests
 composer test
@@ -102,7 +102,7 @@ php artisan migrate:status
 
 ## 📖 Full Plan Location
 
-See detailed plan: `docs/plan/code-improvement-plan.md`
+See detailed plan: `docs/plan/11-04-2026-code-improvement-plan.md`
 
 This quick reference is a summary - refer to the full plan for implementation details.
 

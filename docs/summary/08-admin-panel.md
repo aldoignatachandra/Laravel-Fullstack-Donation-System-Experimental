@@ -65,7 +65,7 @@ class AdminPanelProvider extends PanelProvider
 
 ### 1. CampaignResource
 
-**File**: `app/Filament/Resources/CampaignResource.php`
+**File**: `app/Filament/Resources/Campaigns/CampaignResource.php`
 
 **Navigation**: Campaign Management > Campaigns  
 **Icon**: BellAlert  
@@ -203,7 +203,7 @@ public static function getRelations(): array
 
 ### 2. UserResource
 
-**File**: `app/Filament/Resources/UserResource.php`
+**File**: `app/Filament/Resources/Users/UserResource.php`
 
 **Navigation**: User Management > Users  
 **Icon**: Users  
@@ -218,7 +218,7 @@ public static function getRelations(): array
 
 ### 3. DonationResource
 
-**File**: `app/Filament/Resources/DonationResource.php`
+**File**: `app/Filament/Resources/Donations/DonationResource.php`
 
 **Navigation**: Campaign Management > Donations  
 **Icon**: CurrencyDollar  
@@ -234,7 +234,7 @@ public static function getRelations(): array
 
 ### 4. CampaignCategoryResource
 
-**File**: `app/Filament/Resources/CampaignCategoryResource.php`
+**File**: `app/Filament/Resources/CampaignCategories/CampaignCategoryResource.php`
 
 **Navigation**: Campaign Management > Categories  
 **Icon**: BarsArrowUp  
@@ -381,7 +381,7 @@ php artisan shield:generate --resource=CampaignResource
 php artisan make:filament-page Settings Admin
 ```
 
-**File**: `app/Filament/Pages/Settings.php`
+**Example file (if generated)**: `app/Filament/Pages/Settings.php`
 
 ```php
 class Settings extends Page

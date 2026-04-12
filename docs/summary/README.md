@@ -17,7 +17,6 @@
 9. [Frontend Architecture](./07-frontend-architecture.md)
 10. [Admin Panel (Filament)](./08-admin-panel.md)
 11. [Testing & Development](./09-testing-development.md)
-12. [Project Comparison](./10-project-comparison.md)
 
 ## Quick Summary
 
@@ -27,7 +26,7 @@
 - **Database**: SQLite (default), MySQL/PostgreSQL compatible
 - **Admin Panel**: Filament 4 with Shield
 - **Payment Gateway**: Midtrans (Snap API)
-- **Authentication**: Laravel Breeze + Spatie Permission
+- **Authentication**: Laravel Livewire starter auth (Volt) + Spatie Permission
 
 ### Core Features
 1. **Campaign Management** - Create, edit, and manage fundraising campaigns
@@ -56,7 +55,7 @@ Password: example
 
 ### Default Donor Account
 ```
-Email: donor1@example.com
+Email: ahmad.rizki@example.com
 Password: password
 ```
 
